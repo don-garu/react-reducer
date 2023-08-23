@@ -3,30 +3,34 @@ import './style.css';
 
 export default function App() {
   function countReducer(oldCount, action) {
-    if (action === 'UP') {
-      return oldCount + 1;
-    } else if (action === 'DOWN') {
-      return oldCount - 1;
-    } else if (action === 'RESET') {
+    if (action.type === 'UP') {
+      return oldCount + action.number;
+    } else if (action.type === 'DOWN') {
+      return oldCount - action.number;
+    } else if (action.type === 'RESET') {
       return 0;
     }
   }
-
   const [count, countDispatch] = useReducer(countReducer, 0);
+  const [number, setNumber] = useState(1);
   function down() {
-    countDispatch('DOWN');
+    countDispatch({ type: 'DOWN', number: number });
   }
   function reset() {
-    countDispatch('RESET');
+    countDispatch({ type: 'RESET' });
   }
   function up() {
-    countDispatch('UP');
+    countDispatch({ type: 'UP', number: number });
+  }
+  function changeNumber(event) {
+    setNumber(Number(event.target.value));
   }
   return (
     <div>
-      <input type="button" value="-" onclick={down} />
-      <input type="button" value="0" onclick={reset} />
-      <input type="button" value="+" onclick={up} />
+      <input type="button" value="-" onClick={down} />
+      <input type="button" value="0" onClick={reset} />
+      <input type="button" value="+" onClick={up} />
+      <input type="text" value={number} onChange={changeNumber} />
       <span>{count}</span>
     </div>
   );
